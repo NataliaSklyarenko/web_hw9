@@ -1,12 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+from urllib.parse import urljoin
 
-# Функція для отримання посилання на наступну сторінку
-def get_next_page_url(soup):
+# Функція для отримання абсолютного посилання на наступну сторінку
+def get_next_page_url(base_url, soup):
     next_button = soup.find('li', class_='next')
     if next_button:
-        return next_button.find('a')['href']
+        next_page_relative_url = next_button.find('a')['href']
+        return urljoin(base_url, next_page_relative_url)
     return None
 
 # Список для зберігання цитат
@@ -47,3 +49,5 @@ with open('authors.json', 'w') as f:
     json.dump(list(authors_data.values()), f, ensure_ascii=False, indent=4)
 
 print("Скрапінг завершено.")
+
+
